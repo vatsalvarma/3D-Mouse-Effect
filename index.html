@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greensiri 3D Parallax</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        *{
+          margin:0;
+          padding:0;
+          box-sizing:border-box;
+        }
+
+        body{
+          font-family:Arial, sans-serif;
+          background:#0f172a;
+          overflow-x:hidden;
+          perspective:1200px;
+        }
+
+        /* HERO SECTION */
+        .hero{
+          position:relative;
+          height:100vh;
+          overflow:hidden;
+          transform-style:preserve-3d;
+        }
+
+        /* BACKGROUND */
+        .layer-back{
+          position:absolute;
+          inset:0;
+          background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600') center/cover no-repeat;
+          transform:translateZ(-200px) scale(1.4);
+        }
+
+        /* MID MOUNTAINS */
+        .layer-mid{
+          position:absolute;
+          inset:0;
+          background:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600') center/cover no-repeat;
+          transform:translateZ(-100px) scale(1.2);
+        }
+
+        /* FRONT */
+        .layer-front{
+          position:absolute;
+          bottom:0;
+          width:100%;
+          height:60%;
+          background:url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600') center/cover no-repeat;
+          transform:translateZ(50px);
+        }
+
+        /* TEXT */
+        .hero-content{
+          position:absolute;
+          inset:0;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          flex-direction:column;
+          color:white;
+          z-index:5;
+          text-align:center;
+          transform:translateZ(100px);
+        }
+
+        .hero h1{
+          font-size:90px;
+          letter-spacing:6px;
+        }
+
+        .hero p{
+          margin-top:20px;
+          font-size:22px;
+        }
+
+        /* OVERLAY */
+        .hero::after{
+          content:"";
+          position:absolute;
+          inset:0;
+          background:linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+
+        /* SECOND SECTION */
+        .section{
+          height:100vh;
+          background:white;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          font-size:40px;
+        }
+
+        /* MOBILE */
+        @media(max-width:768px){
+          .hero h1{
+            font-size:40px;
+          }
+        }
+    </style>
+</head>
+<body>
+
+<section class="hero" id="hero">
+
+    <div class="layer-back layer"></div>
+    <div class="layer-mid layer"></div>
+    <div class="layer-front layer"></div>
+
+    <div class="hero-content">
+        <h1>GREENSIRI</h1>
+        <p>Transforming Land To Legacy</p>
+    </div>
+
+</section>
+
+<section class="section">
+    Smooth 3D Experience
+</section>
+
+<script>
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* SCROLL 3D PARALLAX */
+    gsap.to(".layer-back", {
+      y: 150,
+      scrollTrigger:{
+        trigger:".hero",
+        start:"top top",
+        end:"bottom top",
+        scrub:true
+      }
+    });
+
+    gsap.to(".layer-mid", {
+      y: 80,
+      scrollTrigger:{
+        trigger:".hero",
+        start:"top top",
+        end:"bottom top",
+        scrub:true
+      }
+    });
+
+    gsap.to(".layer-front", {
+      y: -120,
+      scrollTrigger:{
+        trigger:".hero",
+        start:"top top",
+        end:"bottom top",
+        scrub:true
+      }
+    });
+
+    /* MOUSE 3D TILT EFFECT */
+    const hero = document.getElementById("hero");
+
+    hero.addEventListener("mousemove", (e) => {
+
+      let x = (window.innerWidth / 2 - e.clientX) / 40;
+      let y = (window.innerHeight / 2 - e.clientY) / 40;
+
+      gsap.to(".layer-back", { x: x, y: y, duration: 0.5 });
+      gsap.to(".layer-mid", { x: x * 1.5, y: y * 1.5, duration: 0.5 });
+      gsap.to(".layer-front", { x: x * 2, y: y * 2, duration: 0.5 });
+      gsap.to(".hero-content", { x: x * 2.5, y: y * 2.5, duration: 0.5 });
+
+    });
+
+    /* ENTRY ANIMATION */
+    gsap.from(".hero-content", {
+      y:50,
+      opacity:0,
+      duration:1.5,
+      ease:"power3.out"
+    });
+
+</script>
+
+</body>
+</html>
